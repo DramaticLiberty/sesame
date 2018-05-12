@@ -60,6 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
       print('Connected to second database and read ${snapshot.value}');
     });
 
+
+    FirebaseDatabase.instance.reference().child('observations').push().set(<String, String>{
+      'ana': 'are mere'
+    });
+
+
     _counterRef.keepSynced(true);
     print(_counterRef);
     final _counterSubscription = _counterRef.onValue.listen((Event event) {
