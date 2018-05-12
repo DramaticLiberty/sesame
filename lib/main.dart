@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mypt/pt/mypt.dart';
 
 void main() => runApp(new MyApp());
 

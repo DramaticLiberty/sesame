@@ -6,11 +6,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/testing.dart';
 import 'package:http/http.dart';
 
 import 'package:mypt/main.dart';
-import 'package:mypt/pt/myclient.dart' as client;
 
 
 class MyClientRequests {
@@ -35,12 +33,6 @@ class MyClientRequests {
   }
 }
 
-class MyptClient extends client.MyptClient {
-  MyptClient(MyClientRequests h) : super.http(new MockClient(h.next)) {
-
-  }
-}
-
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
@@ -57,26 +49,5 @@ void main() {
     // Verify that our counter has incremented.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
-  });
-
-  testWidgets('Test version http request', (WidgetTester tester) async {
-    var cr = new MyClientRequests();
-    var c = new MyptClient(cr);
-
-    cr.setVersion();
-    var r = await c.version();
-    expect(r, isNotNull);
-    expect(r['version'] == '0.19.20', isTrue);
-  });
-
-
-  testWidgets('Test companies http request', (WidgetTester tester) async {
-    var cr = new MyClientRequests();
-    var c = new MyptClient(cr);
-
-    cr.setCompanies();
-    var r = await c.companies('123456');
-    expect(r, isNotNull);
-    expect(r[0]['company_name'] == 'CornerMarkt', isTrue);
   });
 }
