@@ -11,7 +11,6 @@ import Vision
     var capture: Capture?
     var helper: Yolo2Helper?
 
-    
     func takePhoto(_ controller: UIViewController, _ result: @escaping FlutterResult) {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -84,34 +83,78 @@ import Vision
         }
         DispatchQueue.main.async {
             let boundingBoxes = self.helper!.computeBoundingBoxes(features: features)
-            let trafic = boundingBoxes.filter({ print($0.classIndex); return $0.isTrafic() })
-            if !trafic.isEmpty {
-                if let result = self.result {
-                    var array = [[String: String]]()
-                    for tr in trafic {
-                        let dict: [String: String] = ["x": "\(tr.rect.origin.x)",
-                            "y": "\(tr.rect.origin.y)", "width": "\(tr.rect.width)", "height": "\(tr.rect.height)"]
-                        array.append(dict)
-                    }
-                    result(array)
+            let trafic = boundingBoxes.filter({ $0.isTrafic() })
+            self.showTrafic(trafic)
+            if !trafic.isEmpty, let result = self.result {
+                var array = [[String: String]]()
+                for tr in trafic {
+                    let dict: [String: String] = ["x": "\(tr.rect.origin.x)",
+                        "y": "\(tr.rect.origin.y)", "width": "\(tr.rect.width)", "height": "\(tr.rect.height)"]
+                    array.append(dict)
                 }
-//                print(boundingBoxes)
-//                let controller: FlutterViewController = self.window?.rootViewController as! FlutterViewController;
-//                let channel = FlutterMethodChannel(name: "mypt.aeliptus.com/vision", binaryMessenger: controller)
-               
-                
-                
+                result(array)
             }
         }
     }
 
+    var previews = [PreviewBox]()
+    var previewContainer: CGRect?
+
     func sessionSetup(_ captureSession: AVCaptureSession) {
         guard let controller = window?.rootViewController else { return }
         let preview = AVCaptureVideoPreviewLayer(session: captureSession)
-        preview.videoGravity = AVLayerVideoGravity.resizeAspect
+        preview.videoGravity = AVLayerVideoGravity.resizeAspectFill
         preview.connection?.videoOrientation = .portrait
         controller.view.layer.addSublayer(preview)
         preview.frame = controller.view.frame
+        self.previewContainer = controller.view.frame
+        for _ in 0..<5 {
+            let p = PreviewBox()
+            self.previews.append(p)
+            p.addToContainer(controller.view.layer)
+        }
     }
 
+    func showTrafic(_ predictions: [Prediction]) {
+        var pList = [Prediction]()
+        pList.append(contentsOf: predictions)
+        guard let container = self.previewContainer else { return }
+        for pb in self.previews {
+            if pList.isEmpty {
+                pb.prediction = nil
+                pb.hide()
+            } else {
+                let prediction = pList.popLast()
+                pb.prediction = prediction
+                pb.show(prediction!.previewRect(container))
+            }
+        }
+    }
+}
+
+class PreviewBox {
+    let shape: CAShapeLayer
+    var prediction: Prediction?
+
+    init() {
+        self.shape = CAShapeLayer()
+        self.shape.fillColor = UIColor(displayP3Red: 0.1647, green: 1.0, blue: 1.0, alpha: 0.15).cgColor
+        self.shape.lineWidth = 2
+        self.shape.isHidden = true
+    }
+
+    func addToContainer(_ parent: CALayer) {
+        parent.addSublayer(self.shape)
+    }
+
+    func show(_ box: CGRect) {
+        let path = UIBezierPath(rect: box)
+        self.shape.path = path.cgPath
+        self.shape.strokeColor = UIColor(displayP3Red: 0.1647, green: 1.0, blue: 1.0, alpha: 1.0).cgColor
+        self.shape.isHidden = false
+    }
+
+    func hide() {
+        self.shape.isHidden = true
+    }
 }
