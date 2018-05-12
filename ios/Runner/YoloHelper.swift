@@ -25,6 +25,51 @@ class Prediction {
     func isTrafic() -> Bool {
         return Prediction.labels.contains(self.classIndex)
     }
+
+    func previewRect(_ previewContainer: CGRect) -> CGRect {
+        let width = previewContainer.width
+        let height = width * 4 / 4
+        let scaleX = width / CGFloat(Yolo2Helper.inputWidth)
+        let scaleY = height / CGFloat(Yolo2Helper.inputHeight)
+        let top = (previewContainer.height - height) / 2
+        return CGRect(
+            x: self.rect.origin.x * scaleX,
+            y: self.rect.origin.y * scaleY + top,
+            width: self.rect.size.width * scaleX,
+            height: self.rect.size.height * scaleY)
+    }
+
+    func similarity(_ other: Prediction) -> Double {
+        // 0 - very similar
+        // 1 - very dissimilar
+        if self.classIndex != other.classIndex {
+            return 1.0;
+        }
+        let iRect = self.rect.intersection(other.rect).area()
+        let ss = self.rect.area().similarity(iRect) + other.rect.area().similarity(iRect)
+        return ss / 2
+    }
+}
+
+extension CGFloat {
+    func similarity(_ other: CGFloat) -> Double {
+        let dif = 2 * abs(self - other)
+        let sum = self + other
+        if sum == 0 {
+            return 0
+        }
+        let dv = Double(0.25 * dif / sum)
+        if dv > 1.0 {
+            return 1.0
+        }
+        return dv
+    }
+}
+
+extension CGRect {
+    func area() -> CGFloat {
+        return self.width * self.height
+    }
 }
 
 /**

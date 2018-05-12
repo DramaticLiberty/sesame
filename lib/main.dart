@@ -49,9 +49,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static const platform = const MethodChannel('mypt.aeliptus.com/vision');
   int _counter = 0;
-  String _faces = "Unknown";
+  var _faces = [];
   String name = "Alex";
-
+  double _refArea = 150.0 * 200.0;
+  
   _MyHomePageState() {
   
     final _counterRef = FirebaseDatabase.instance.reference().child('observations');
@@ -95,6 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -105,12 +107,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<Null> _getFaces() async {
-    String faces;
+    var faces = [];
+    double area, delta, w, h = 0.0;
+    
+    var firstObj = Map();
+
     try {
-      final String result = await platform.invokeMethod('faces', "abc");
+      var result = await platform.invokeMethod('faces', "abc");
       faces = result;
+      firstObj = result[0];
+      w = double.parse(firstObj['width']);
+      h = double.parse(firstObj['height']);
+      area = w * h;
+      delta = area * 0.1;
+     
+    
+      if ( _refArea > (area - delta) ) {
+        print('smaller');
+      } else {
+        print('bigger');
+      }
     } on PlatformException catch (e) {
-      faces = "Unknown";
+      faces = [];
     }
 
     setState(() {
