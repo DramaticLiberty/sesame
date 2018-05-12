@@ -32,22 +32,10 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   var _faces = [];
   String name = "Alex";
+  double _refArea = 150.0 * 200.0;
+  
 
-  _MyHomePageState() {
-    var facesChannel = MethodChannel("mypt.aeliptus.com/vision");
-    facesChannel.setMethodCallHandler((MethodCall call) async {
-      print("here");
-      // if (call.method == "faces") {
-      //   var faces = call.arguments[0];
-      //   setState(() {
-      //     _faces = faces;
-      //   });
-      //   return;
-      // } else {
-      //   throw PlatformException(code: "FlutterMethodNotImplemented");
-      // }
-    });
-  }
+  
 
   void _incrementCounter() {
     setState(() {
@@ -60,9 +48,25 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<Null> _getFaces() async {
     var faces = [];
+    double area, delta, w, h = 0.0;
+    
+    var firstObj = Map();
+
     try {
       var result = await platform.invokeMethod('faces', "abc");
       faces = result;
+      firstObj = result[0];
+      w = double.parse(firstObj['width']);
+      h = double.parse(firstObj['height']);
+      area = w * h;
+      delta = area * 0.1;
+     
+    
+      if ( _refArea > (area - delta) ) {
+        print('smaller');
+      } else {
+        print('bigger');
+      }
     } on PlatformException catch (e) {
       faces = [];
     }

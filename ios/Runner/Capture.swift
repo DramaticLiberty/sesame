@@ -40,7 +40,7 @@ class Capture: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate {
     func capture() {
         // position: .front
         guard
-            let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front),
+            let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
             let input = try? AVCaptureDeviceInput(device: device)
         else {
             return;
