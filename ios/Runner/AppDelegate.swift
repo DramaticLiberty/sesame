@@ -11,6 +11,7 @@ import Vision
     var capture: Capture?
     var helper: Yolo2Helper?
 
+    
     func takePhoto(_ controller: UIViewController, _ result: @escaping FlutterResult) {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -59,6 +60,7 @@ import Vision
             // Handle messages
             if call.method == "faces" {
                 if let arg = call.arguments {
+                    self.result = result
                     self.capture?.capture()
                     // self.takePhoto(controller, result)
                 } else {
@@ -82,10 +84,23 @@ import Vision
         }
         DispatchQueue.main.async {
             let boundingBoxes = self.helper!.computeBoundingBoxes(features: features)
-            let trafic = boundingBoxes.filter({ $0.isTrafic() })
+            let trafic = boundingBoxes.filter({ print($0.classIndex); return $0.isTrafic() })
             if !trafic.isEmpty {
-
-                print(boundingBoxes)
+                if let result = self.result {
+                    var array = [[String: String]]()
+                    for tr in trafic {
+                        let dict: [String: String] = ["x": "\(tr.rect.origin.x)",
+                            "y": "\(tr.rect.origin.y)", "width": "\(tr.rect.width)", "height": "\(tr.rect.height)"]
+                        array.append(dict)
+                    }
+                    result(array)
+                }
+//                print(boundingBoxes)
+//                let controller: FlutterViewController = self.window?.rootViewController as! FlutterViewController;
+//                let channel = FlutterMethodChannel(name: "mypt.aeliptus.com/vision", binaryMessenger: controller)
+               
+                
+                
             }
         }
     }

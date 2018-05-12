@@ -30,21 +30,22 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   static const platform = const MethodChannel('mypt.aeliptus.com/vision');
   int _counter = 0;
-  String _faces = "Unknown";
+  var _faces = [];
   String name = "Alex";
 
   _MyHomePageState() {
     var facesChannel = MethodChannel("mypt.aeliptus.com/vision");
     facesChannel.setMethodCallHandler((MethodCall call) async {
-      if (call.method == "faces") {
-        var faces = call.arguments[0];
-        setState(() {
-          _faces = faces;
-        });
-        return;
-      } else {
-        throw PlatformException(code: "FlutterMethodNotImplemented");
-      }
+      print("here");
+      // if (call.method == "faces") {
+      //   var faces = call.arguments[0];
+      //   setState(() {
+      //     _faces = faces;
+      //   });
+      //   return;
+      // } else {
+      //   throw PlatformException(code: "FlutterMethodNotImplemented");
+      // }
     });
   }
 
@@ -58,12 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<Null> _getFaces() async {
-    String faces;
+    var faces = [];
     try {
-      final String result = await platform.invokeMethod('faces', "abc");
+      var result = await platform.invokeMethod('faces', "abc");
       faces = result;
     } on PlatformException catch (e) {
-      faces = "Unknown";
+      faces = [];
     }
 
     setState(() {
