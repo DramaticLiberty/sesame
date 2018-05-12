@@ -8,11 +8,11 @@ import 'package:firebase_database/firebase_database.dart';
 
   Future<void> main() async {
     final FirebaseApp app = await FirebaseApp.configure(
-      name: 'db2',
+      name: 'opensesame-5fcab',
       options: const FirebaseOptions(
         googleAppID: '1:886232296258:ios:f2bf712232ab23b1',
         gcmSenderID: '886232296258',
-        databaseURL: 'https://opensesame-5fcab.firebaseio.com/',
+        databaseURL: 'https://opensesame-5fcab.firebaseio.com',
     ));
     runApp(new MyApp(app: app));
   }
@@ -53,6 +53,28 @@ class _MyHomePageState extends State<MyHomePage> {
   String name = "Alex";
 
   _MyHomePageState() {
+  
+    final _counterRef = FirebaseDatabase.instance.reference().child('observations');
+
+    FirebaseDatabase.instance.reference().child('observations').once().then((DataSnapshot snapshot) {
+      print('Connected to second database and read ${snapshot.value}');
+    });
+
+    _counterRef.keepSynced(true);
+    print(_counterRef);
+    final _counterSubscription = _counterRef.onValue.listen((Event event) {
+      print('Got something plm');
+      print(event.snapshot.value);
+      setState(() {
+        _counter = event.snapshot.value ?? 0;
+      });
+    }, onError: (Object o) {
+      final DatabaseError error = o;
+      setState(() {
+      });
+    });
+
+  
     var facesChannel = MethodChannel("mypt.aeliptus.com/vision");
     facesChannel.setMethodCallHandler((MethodCall call) async {
       if (call.method == "faces") {

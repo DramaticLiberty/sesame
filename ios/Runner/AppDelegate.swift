@@ -2,6 +2,7 @@ import UIKit
 import Flutter
 import AVKit
 import Vision
+import Firebase
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate, CaptureDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -49,6 +50,7 @@ import Vision
     }
 
     override func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure();
         GeneratedPluginRegistrant.register(with: self)
         self.capture = try? Capture(yolo().model, self, 10)
         self.helper = Yolo2Helper()
@@ -68,6 +70,9 @@ import Vision
                 result(FlutterMethodNotImplemented)
             }
         });
+        
+        
+        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
