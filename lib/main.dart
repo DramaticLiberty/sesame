@@ -3,9 +3,28 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() => runApp(new MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+  Future<void> main() async {
+    final FirebaseApp app = await FirebaseApp.configure(
+      name: 'db2',
+      options: const FirebaseOptions(
+        googleAppID: '1:886232296258:ios:f2bf712232ab23b1',
+        gcmSenderID: '886232296258',
+        databaseURL: 'https://opensesame-5fcab.firebaseio.com/',
+    ));
+    runApp(new MyApp(app: app));
+  }
 
 class MyApp extends StatelessWidget {
+
+  MyApp({this.app});
+  final FirebaseApp app;
+
+  // @override
+  // _MyAppState createState() => new _MyAppState();
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
