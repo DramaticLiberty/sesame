@@ -3,9 +3,28 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main() => runApp(new MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
+
+  Future<void> main() async {
+    final FirebaseApp app = await FirebaseApp.configure(
+      name: 'opensesame-5fcab',
+      options: const FirebaseOptions(
+        googleAppID: '1:886232296258:ios:f2bf712232ab23b1',
+        gcmSenderID: '886232296258',
+        databaseURL: 'https://opensesame-5fcab.firebaseio.com',
+    ));
+    runApp(new MyApp(app: app));
+  }
 
 class MyApp extends StatelessWidget {
+
+  MyApp({this.app});
+  final FirebaseApp app;
+
+  // @override
+  // _MyAppState createState() => new _MyAppState();
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -34,8 +53,49 @@ class _MyHomePageState extends State<MyHomePage> {
   String name = "Alex";
   double _refArea = 150.0 * 200.0;
   
+  _MyHomePageState() {
+  
+    final _counterRef = FirebaseDatabase.instance.reference().child('observations');
+
+    FirebaseDatabase.instance.reference().child('observations').once().then((DataSnapshot snapshot) {
+      print('Connected to second database and read ${snapshot.value}');
+    });
+
+
+    FirebaseDatabase.instance.reference().child('observations').push().set(<String, String>{
+      'ana': 'are mere'
+    });
+
+
+    _counterRef.keepSynced(true);
+    print(_counterRef);
+    final _counterSubscription = _counterRef.onValue.listen((Event event) {
+      print('Got something plm');
+      print(event.snapshot.value);
+      setState(() {
+        _counter = event.snapshot.value ?? 0;
+      });
+    }, onError: (Object o) {
+      final DatabaseError error = o;
+      setState(() {
+      });
+    });
 
   
+    var facesChannel = MethodChannel("mypt.aeliptus.com/vision");
+    facesChannel.setMethodCallHandler((MethodCall call) async {
+      if (call.method == "faces") {
+        var faces = call.arguments[0];
+        setState(() {
+          _faces = faces;
+        });
+        return;
+      } else {
+        throw PlatformException(code: "FlutterMethodNotImplemented");
+      }
+    });
+  }
+
 
   void _incrementCounter() {
     setState(() {
