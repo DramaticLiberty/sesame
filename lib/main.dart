@@ -48,25 +48,28 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static const platform = const MethodChannel('mypt.aeliptus.com/vision');
-  String _observation = '';
+  var _observation = '';
   int _counter = 0;
   var _faces = [];
   double _refArea = 150.0 * 200.0;
   List<String> _devices = ['camera', 'audio', 'dashboard_light', 'door'];
+  StreamSubscription<Event> _observationSubscription;
+  DatabaseReference _counterRef;
   
   _MyHomePageState() {
   
-    final _counterRef = FirebaseDatabase.instance.reference().child('observations');
+    _counterRef = FirebaseDatabase.instance.reference().child('observations/name');
 
     _counterRef.once().then((DataSnapshot snapshot) {
       print('Connected to second database and read ${snapshot.value}');
     });
+    _counterRef.keepSynced(true);
 
-    final _observationsSubscription = _counterRef.onValue.listen((Event event) {
+    _observationSubscription = _counterRef.onChildAdded.listen((Event event) {
       print('Got something plm');
-      print(event.snapshot.value);
+
       setState(() {
-        _observation = event.snapshot.value ?? '';
+        this._observation = event.snapshot.value['sensor'] ?? '';
       });
     }, onError: (Object o) {
       final DatabaseError error = o;
@@ -115,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
      
     
       if ( _refArea < (area - delta) ) {
-        FirebaseDatabase.instance.reference().child('observations/name').push().set(<String, String>{
+        FirebaseDatabase.instance.reference().child('observations/name').push().set({
           'sensor': 'door'
         });
       }
