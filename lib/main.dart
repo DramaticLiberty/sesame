@@ -56,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   StreamSubscription<Event> _observationSubscription;
   DatabaseReference _counterRef;
   String _value = '';
+  String _ok = 'false';
 
   _MyHomePageState() {
   
@@ -124,16 +125,21 @@ class _MyHomePageState extends State<MyHomePage> {
           case '41':
             //cup
             this._value = 'cup';
+            this._ok = 'cup';
             break;
           case '1':
             //bicicle
             this._value = 'bicycle';
+            this._ok = 'bicycle';
             break;
           case '56':
             //chair
             this._value = 'chair';
+            this._ok = 'chair';
             break;
           default:
+            this._ok = 'false';
+            break;
         }
 
         
@@ -174,16 +180,16 @@ class _MyHomePageState extends State<MyHomePage> {
           )
           ]
           : (this._devices[1] == 'audio') ? <Widget>[
-            new Icon(Icons.audiotrack, color: Colors.red, size: 48.0),
+            new Icon(Icons.audiotrack, color: (this._value != this._ok)  ? Colors.grey : Colors.red, size: 120.0),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             )] : (this._devices[1] == 'dashboard_light') ? <Widget>[
-            new Icon(Icons.warning, color: Colors.yellow, size: 48.0),
+            new Icon(Icons.warning, color: (this._value != this._ok) ? Colors.grey : Colors.yellow, size: 120.0),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             )
         ] : <Widget>[
-            new Icon(Icons.lock, color: Colors.grey, size: 48.0),
+            new Icon(Icons.lock, color: (this._value != this._ok) ? Colors.grey : Colors.red, size: 120.0),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             )
