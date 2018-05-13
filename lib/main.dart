@@ -174,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
           ]
           : (this._devices[1] == 'audio') ? <Widget>[
-            new Icon(Icons.audiotrack, color: Colors.red, , size: 48.0),
+            new Icon(Icons.audiotrack, color: Colors.red, size: 48.0),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             )] : (this._devices[1] == 'dashboard_light') ? <Widget>[
@@ -183,7 +183,7 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.display1,
             )
         ] : <Widget>[
-            new Icon(Icons.lock, color: Colors.grey, , size: 48.0),
+            new Icon(Icons.lock, color: Colors.grey, size: 48.0),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             )
