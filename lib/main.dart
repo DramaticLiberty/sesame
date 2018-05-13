@@ -55,7 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
   List<String> _devices = ['camera', 'audio', 'dashboard_light', 'door'];
   StreamSubscription<Event> _observationSubscription;
   DatabaseReference _counterRef;
-  
+  String _value = '';
+
   _MyHomePageState() {
   
     _counterRef = FirebaseDatabase.instance.reference().child('observations/name');
@@ -109,7 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     try {
       var result = await platform.invokeMethod('faces', "abc");
-      String _value = '';
+      
       faces = result;
       firstObj = result[0];
       w = double.parse(firstObj['width']);
@@ -122,22 +123,22 @@ class _MyHomePageState extends State<MyHomePage> {
         switch (firstObj['key']) {
           case '41':
             //cup
-            _value = 'cup';
+            this._value = 'cup';
             break;
           case '1':
             //bicicle
-            _value = 'bicycle';
+            this._value = 'bicycle';
             break;
           case '56':
             //chair
-            _value = 'chair';
+            this._value = 'chair';
             break;
           default:
         }
 
         
         FirebaseDatabase.instance.reference().child('observations/name').push().set({
-          'sensor': _value
+          'sensor': this._value
         });
       }
     } on PlatformException catch (e) {
@@ -161,9 +162,9 @@ class _MyHomePageState extends State<MyHomePage> {
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _devices[0] == 'camera' ? <Widget>[
-            new Icon(Icons.access_alarm, color: Colors.red),
-            new Text('$_observation',
+          children: _devices[1] == 'camera' ? <Widget>[
+            
+            new Text('START DETECTION',
               style: Theme.of(context).textTheme.display1,
             ),
             new FloatingActionButton(
@@ -172,12 +173,21 @@ class _MyHomePageState extends State<MyHomePage> {
             child: new Icon(Icons.add),
           )
           ]
-          : <Widget>[
-            new Icon(Icons.access_alarm, color: Colors.red),
+          : (this._value == 'cup') ? <Widget>[
+            new Icon(Icons.warning, color: Colors.red),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
-            ),
-        ]
+            )] : (this._value == 'chair') ? <Widget>[
+            new Icon(Icons.lock, color: Colors.yellow),
+            new Text('$_observation',
+              style: Theme.of(context).textTheme.display1,
+            )
+        ] : <Widget>[
+            new Icon(Icons.audiotrack, color: Colors.red),
+            new Text('$_observation',
+              style: Theme.of(context).textTheme.display1,
+            )
+        ] 
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     ));
