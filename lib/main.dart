@@ -46,7 +46,11 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+
+  AnimationController _opacityController;
+  Animation<double> _opacity;
+
   static const platform = const MethodChannel('mypt.aeliptus.com/vision');
   var _observation = '';
   int _counter = 0;
@@ -57,6 +61,28 @@ class _MyHomePageState extends State<MyHomePage> {
   DatabaseReference _counterRef;
   String _value = '';
   String _ok = 'false';
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    _opacityController = new AnimationController(vsync: this,duration: const Duration(milliseconds: 400));
+    _opacity = new CurvedAnimation(parent: _opacityController, curve: Curves.easeInOut)..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _opacityController.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        _opacityController.forward();
+      }
+    });
+    _opacityController.forward();
+  }
+  
+  @override
+  void dispose() {
+    super.dispose();
+  
+    _opacityController.dispose();
+  }
 
   _MyHomePageState() {
   
