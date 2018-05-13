@@ -182,6 +182,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     });
   }
 
+  Widget animated(Widget ic, Widget tx) {
+    return new FadeTransition(
+        opacity: _opacity,
+        child: new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ic, tx
+            ]));
+  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -206,38 +216,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           )
           ]
           : (this._devices[1] == 'audio') ? <Widget> [
-            new FadeTransition(
-              opacity: _opacity,
-              child: new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new Icon(Icons.audiotrack, color: (this._value != this._ok)  ? Colors.grey : Colors.red, size: 120.0),
-                  new Text('$_observation',
-                    style: Theme.of(context).textTheme.display1,)
-                ]))] 
+            this.animated(
+                new Icon(Icons.audiotrack, color: (this._value != this._ok)  ? Colors.grey : Colors.red, size: 120.0),
+                new Text('$_observation',
+                  style: Theme.of(context).textTheme.display1))
+            ]
             : (this._devices[1] == 'dashboard_light') ? <Widget> [
-              new FadeTransition(
-              opacity: _opacity,
-              child: new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children:
-                  <Widget>[
-                    new Icon(Icons.warning, color: (this._value != this._ok) ? Colors.grey : Colors.yellow, size: 120.0),
-                    new Text('$_observation',
-                      style: Theme.of(context).textTheme.display1,
-                    )
-                  ]  ) ) ]
-            : <Widget> [ new FadeTransition(
-              opacity: _opacity,
-              child: new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: 
-                  <Widget>[
-                    new Icon(Icons.lock, color: (this._value != this._ok) ? Colors.grey : Colors.red, size: 120.0),
-                    new Text('$_observation',
-                      style: Theme.of(context).textTheme.display1,
-                    )
-        ] ) ) ]
+            this.animated(
+                new Icon(Icons.warning, color: (this._value != this._ok) ? Colors.grey : Colors.yellow, size: 120.0),
+                new Text('$_observation',
+                  style: Theme.of(context).textTheme.display1))
+            ]
+            : <Widget> [
+            this.animated(
+              new Icon(Icons.lock, color: (this._value != this._ok) ? Colors.grey : Colors.red, size: 120.0),
+              new Text('$_observation',
+                  style: Theme.of(context).textTheme.display1))
+            ]
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     ));
