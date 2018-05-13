@@ -140,19 +140,25 @@ class _MyHomePageState extends State<MyHomePage> {
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          children: _devices[1] == 'camera' ? <Widget>[
             new Icon(Icons.access_alarm, color: Colors.red),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             ),
-          ],
-        ),
+            new FloatingActionButton(
+            onPressed: _incrementCounter,
+            tooltip: 'Increment',
+            child: new Icon(Icons.add),
+          )
+          ]
+          : <Widget>[
+            new Icon(Icons.access_alarm, color: Colors.red),
+            new Text('$_observation',
+              style: Theme.of(context).textTheme.display1,
+            ),
+        ]
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+      // This trailing comma makes auto-formatting nicer for build methods.
+    ));
   }
 }
