@@ -108,7 +108,7 @@ import Firebase
     func sessionSetup(_ captureSession: AVCaptureSession) {
         guard let controller = window?.rootViewController else { return }
         let preview = AVCaptureVideoPreviewLayer(session: captureSession)
-        preview.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        preview.videoGravity = AVLayerVideoGravity.resizeAspect
         preview.connection?.videoOrientation = .portrait
         controller.view.layer.addSublayer(preview)
         preview.frame = controller.view.frame
