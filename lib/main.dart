@@ -48,39 +48,31 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static const platform = const MethodChannel('mypt.aeliptus.com/vision');
+  String _observation = '';
   int _counter = 0;
   var _faces = [];
-  String name = "Alex";
   double _refArea = 150.0 * 200.0;
+  List<String> _devices = ['camera', 'audio', 'dashboard_light', 'door'];
   
   _MyHomePageState() {
   
     final _counterRef = FirebaseDatabase.instance.reference().child('observations');
 
-    FirebaseDatabase.instance.reference().child('observations').once().then((DataSnapshot snapshot) {
+    _counterRef.once().then((DataSnapshot snapshot) {
       print('Connected to second database and read ${snapshot.value}');
     });
 
-
-    FirebaseDatabase.instance.reference().child('observations').push().set(<String, String>{
-      'ana': 'are mere'
-    });
-
-
-    _counterRef.keepSynced(true);
-    print(_counterRef);
-    final _counterSubscription = _counterRef.onValue.listen((Event event) {
+    final _observationsSubscription = _counterRef.onValue.listen((Event event) {
       print('Got something plm');
       print(event.snapshot.value);
       setState(() {
-        _counter = event.snapshot.value ?? 0;
+        _observation = event.snapshot.value ?? '';
       });
     }, onError: (Object o) {
       final DatabaseError error = o;
       setState(() {
       });
     });
-
   
     var facesChannel = MethodChannel("mypt.aeliptus.com/vision");
     facesChannel.setMethodCallHandler((MethodCall call) async {
@@ -122,10 +114,10 @@ class _MyHomePageState extends State<MyHomePage> {
       delta = area * 0.1;
      
     
-      if ( _refArea > (area - delta) ) {
-        print('smaller');
-      } else {
-        print('bigger');
+      if ( _refArea < (area - delta) ) {
+        FirebaseDatabase.instance.reference().child('observations/name').push().set(<String, String>{
+          'sensor': 'door'
+        });
       }
     } on PlatformException catch (e) {
       faces = [];
@@ -138,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     return new Scaffold(
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -149,7 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             new Icon(Icons.access_alarm, color: Colors.red),
-            new Text('$_counter',
+            new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             ),
           ],

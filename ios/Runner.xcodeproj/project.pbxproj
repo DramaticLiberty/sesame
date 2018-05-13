@@ -196,7 +196,7 @@
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = YPAF2WHL8E;
+						DevelopmentTeam = AA236U6UZV;
 						LastSwiftMigration = 0910;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -468,7 +468,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				COREML_CODEGEN_LANGUAGE = Swift;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YPAF2WHL8E;
+				DEVELOPMENT_TEAM = AA236U6UZV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -501,7 +501,7 @@
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				COREML_CODEGEN_LANGUAGE = Swift;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YPAF2WHL8E;
+				DEVELOPMENT_TEAM = AA236U6UZV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
