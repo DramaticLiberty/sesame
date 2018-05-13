@@ -173,17 +173,17 @@ class _MyHomePageState extends State<MyHomePage> {
             child: new Icon(Icons.add),
           )
           ]
-          : (this._value == 'cup') ? <Widget>[
-            new Icon(Icons.warning, color: Colors.red),
+          : (this._devices[1] == 'audio') ? <Widget>[
+            new Icon(Icons.audiotrack, color: Colors.red, , size: 48.0),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
-            )] : (this._value == 'chair') ? <Widget>[
-            new Icon(Icons.lock, color: Colors.yellow),
+            )] : (this._devices[1] == 'dashboard_light') ? <Widget>[
+            new Icon(Icons.warning, color: Colors.yellow, size: 48.0),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             )
         ] : <Widget>[
-            new Icon(Icons.audiotrack, color: Colors.red),
+            new Icon(Icons.lock, color: Colors.grey, , size: 48.0),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,
             )
