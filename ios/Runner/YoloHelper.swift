@@ -10,7 +10,7 @@ import CoreML
 import Accelerate
 
 class Prediction {
-    public static let labels = [1, 2, 3, 5, 7, 41]
+    public static let labels = [1, 2, 3, 5, 7, 41, 56]
 
     let classIndex: Int
     let score: Float

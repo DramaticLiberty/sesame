@@ -109,6 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     try {
       var result = await platform.invokeMethod('faces', "abc");
+      String _value = '';
       faces = result;
       firstObj = result[0];
       w = double.parse(firstObj['width']);
@@ -118,8 +119,25 @@ class _MyHomePageState extends State<MyHomePage> {
      
     
       if ( _refArea < (area - delta) ) {
+        switch (firstObj['key']) {
+          case '41':
+            //cup
+            _value = 'cup';
+            break;
+          case '1':
+            //bicicle
+            _value = 'bicycle';
+            break;
+          case '56':
+            //chair
+            _value = 'chair';
+            break;
+          default:
+        }
+
+        
         FirebaseDatabase.instance.reference().child('observations/name').push().set({
-          'sensor': 'door'
+          'sensor': _value
         });
       }
     } on PlatformException catch (e) {
@@ -143,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _devices[1] == 'camera' ? <Widget>[
+          children: _devices[0] == 'camera' ? <Widget>[
             new Icon(Icons.access_alarm, color: Colors.red),
             new Text('$_observation',
               style: Theme.of(context).textTheme.display1,

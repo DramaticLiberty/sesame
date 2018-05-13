@@ -94,7 +94,11 @@ import Firebase
                 var array = [[String: String]]()
                 for tr in trafic {
                     let dict: [String: String] = ["x": "\(tr.rect.origin.x)",
-                        "y": "\(tr.rect.origin.y)", "width": "\(tr.rect.width)", "height": "\(tr.rect.height)"]
+                        "y": "\(tr.rect.origin.y)",
+                        "width": "\(tr.rect.width)",
+                        "height": "\(tr.rect.height)",
+                        "key": "\(tr.classIndex)"
+                    ]
                     array.append(dict)
                 }
                 result(array)
