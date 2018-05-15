@@ -59,22 +59,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   List<String> _devices = ['camera', 'audio', 'dashboard_light', 'door'];
   StreamSubscription<Event> _observationSubscription;
   DatabaseReference _counterRef;
+<<<<<<< Updated upstream
   String _value = '';
-  String _ok = 'false';
+=======
   
-  @override
-  void initState() {
-    super.initState();
+@override
+   void initState() {
+     super.initState();
     
-    _opacityController = new AnimationController(vsync: this,duration: const Duration(milliseconds: 400));
-    _opacity = new CurvedAnimation(parent: _opacityController, curve: Curves.easeInOut)..addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _opacityController.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        _opacityController.forward();
-      }
-    });
-    _opacityController.forward();
+     _opacityController = new AnimationController(vsync: this,duration: const Duration(milliseconds: 400));
+     _opacity = new CurvedAnimation(parent: _opacityController, curve: Curves.easeInOut)..addStatusListener((status) {
+       if (status == AnimationStatus.completed) {
+         _opacityController.reverse();
+       } else if (status == AnimationStatus.dismissed) {
+         _opacityController.forward();
+       }
+     });
+     _opacityController.forward();
   }
   
   @override
@@ -83,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   
     _opacityController.dispose();
   }
+>>>>>>> Stashed changes
 
   _MyHomePageState() {
   
@@ -151,21 +153,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           case '41':
             //cup
             this._value = 'cup';
-            this._ok = 'cup';
             break;
           case '1':
             //bicicle
             this._value = 'bicycle';
-            this._ok = 'bicycle';
             break;
           case '56':
             //chair
             this._value = 'chair';
-            this._ok = 'chair';
             break;
           default:
-            this._ok = 'false';
-            break;
         }
 
         
@@ -182,26 +179,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     });
   }
 
-  Widget animated(Widget ic, Widget tx) {
-    return new FadeTransition(
-        opacity: _opacity,
-        child: new Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ic, tx
-            ]));
-  }
-
-  Widget imageContainer(String imagePath)
-  {
-    return new Container(
-                  child: new Image.asset(
-                    imagePath,
-                    height: 240.0,
-                    fit: BoxFit.cover)
-                );
-  }
-
   @override
   Widget build(BuildContext context) {
     
@@ -214,7 +191,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _devices[0] == 'camera' ? <Widget>[
+          children: _devices[1] == 'camera' ? <Widget>[
             
             new Text('START DETECTION',
               style: Theme.of(context).textTheme.display1,
@@ -225,27 +202,38 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             child: new Icon(Icons.add),
           )
           ]
-          : (this._devices[1] == 'audio') ? <Widget> [
-            this.animated(
-              //new Icon(Icons.audiotrack, color: (this._value != this._ok)  ? Colors.grey : Colors.red, size: 120.0),
-              imageContainer('images/bike.png'),
-              new Text('$_observation',
-                style: Theme.of(context).textTheme.display1))
-            ]
-            : (this._devices[1] == 'dashboard_light') ? <Widget> [
-            this.animated(
-              //new Icon(Icons.warning, color: (this._value != this._ok) ? Colors.grey : Colors.yellow, size: 120.0),
-              imageContainer('images/car.png'),
-              new Text('$_observation',
-                style: Theme.of(context).textTheme.display1))
-            ]
-            : <Widget> [
-            this.animated(
-              //new Icon(Icons.lock, color: (this._value != this._ok) ? Colors.grey : Colors.red, size: 120.0),
-              imageContainer('motorcycle.png'),
-              new Text('$_observation',
-                  style: Theme.of(context).textTheme.display1))
-            ]
+<<<<<<< Updated upstream
+          : (this._value == 'cup') ? <Widget>[
+            new Icon(Icons.warning, color: Colors.red),
+            new Text('$_observation',
+              style: Theme.of(context).textTheme.display1,
+            )] : (this._value == 'chair') ? <Widget>[
+            new Icon(Icons.lock, color: Colors.yellow),
+            new Text('$_observation',
+              style: Theme.of(context).textTheme.display1,
+            )
+        ] : <Widget>[
+            new Icon(Icons.audiotrack, color: Colors.red),
+            new Text('$_observation',
+              style: Theme.of(context).textTheme.display1,
+            )
+        ] 
+=======
+          : <Widget>[
+            new FadeTransition(
+              opacity: _opacity,
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Icon(Icons.access_alarm, color: Colors.red),
+                  new Text('$_observation',
+                    style: Theme.of(context).textTheme.display1,
+                  ),
+                ]
+              )
+            )
+        ]
+>>>>>>> Stashed changes
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     ));
