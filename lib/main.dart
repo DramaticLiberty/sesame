@@ -192,6 +192,16 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
             ]));
   }
 
+  Widget imageContainer(String imagePath)
+  {
+    return new Container(
+                  child: new Image.asset(
+                    imagePath,
+                    height: 240.0,
+                    fit: BoxFit.cover)
+                );
+  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -204,7 +214,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       body: new Center(
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: _devices[1] == 'camera' ? <Widget>[
+          children: _devices[0] == 'camera' ? <Widget>[
             
             new Text('START DETECTION',
               style: Theme.of(context).textTheme.display1,
@@ -217,19 +227,38 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           ]
           : (this._devices[1] == 'audio') ? <Widget> [
             this.animated(
-                new Icon(Icons.audiotrack, color: (this._value != this._ok)  ? Colors.grey : Colors.red, size: 120.0),
+                //new Icon(Icons.audiotrack, color: (this._value != this._ok)  ? Colors.grey : Colors.red, size: 120.0),
+                /*new Container(
+                  child: new Image.asset(
+                    'images/bike_thumb.png',
+                    height: 240.0,
+                    fit: BoxFit.cover)
+                ),*/
+                imageContainer('images/bike.png'),
                 new Text('$_observation',
                   style: Theme.of(context).textTheme.display1))
             ]
             : (this._devices[1] == 'dashboard_light') ? <Widget> [
             this.animated(
-                new Icon(Icons.warning, color: (this._value != this._ok) ? Colors.grey : Colors.yellow, size: 120.0),
+                //new Icon(Icons.warning, color: (this._value != this._ok) ? Colors.grey : Colors.yellow, size: 120.0),
+                new Container(
+                  child: new Image.asset(
+                    'images/car.png',
+                    height: 240.0,
+                    fit: BoxFit.cover)
+                ),
                 new Text('$_observation',
                   style: Theme.of(context).textTheme.display1))
             ]
             : <Widget> [
             this.animated(
-              new Icon(Icons.lock, color: (this._value != this._ok) ? Colors.grey : Colors.red, size: 120.0),
+              //new Icon(Icons.lock, color: (this._value != this._ok) ? Colors.grey : Colors.red, size: 120.0),
+              new Container(
+                  child: new Image.asset(
+                    'images/motorcycle.png',
+                    height: 240.0,
+                    fit: BoxFit.cover)
+                ),
               new Text('$_observation',
                   style: Theme.of(context).textTheme.display1))
             ]
